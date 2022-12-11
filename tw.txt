@@ -1,0 +1,66 @@
+from flask import Flask, render_template,request
+
+app = Flask(__name__)
+
+@app.route('/')
+def page1():
+    fname = request.args.get('fname')
+    lname = request.args.get('lname')
+    nume = []
+    nume.append(fname)
+    nume.append(lname)
+    return render_template('page1.html',nume =nume)
+
+@app.route('/page2')
+def page2():
+    rows = [
+     { 'id': 1, 'lastName': 'Snow', 'firstName': 'Jon', 'age': 35 },
+     { 'id': 2, 'lastName': 'Lannister', 'firstName': 'Cersei', 'age': 42 },
+     { 'id': 3, 'lastName': 'Lannister', 'firstName': 'Jaime', 'age': 45 }]
+    return render_template('page2.html',rows=rows)
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
+
+
+page1.html
+{% extends 'baseTemplate.html' %}
+{% block content %}
+<h1>{% block title %} Pagina 1{% endblock %}</h1>
+<form>
+    <label for="fname">Prenume:</label><br>
+    <input type="text" id="fname" name="fname" value=""><br>
+    <label for="lname">Nume:</label><br>
+    <input type="text" id="lname" name="lname" value=""><br><br>
+    <input type="submit" value="Submit">
+  </form>
+  {% if nume !=[None,None]%} 
+  <p>Prenumele este {{nume[0]}}, iar numele este {{nume[1]}}</p>
+  {% endif %}
+  {% endblock %}
+
+page2.html
+{% extends 'baseTemplate.html' %}
+{% block content %}
+<h1>{% block title %} Pagina 2{% endblock %}</h1>
+<table id="Overview">
+    <tr>        
+        <th scope="col" >Id</th> 
+        <th scope="col" >Lastname</th>  
+        <th scope="col" >Firstname</th>  
+        <th scope="col" >Age</th>  
+    </tr>
+ 
+{% for info in rows %}
+
+    <tr>
+        <td>{{ info.id }}</td>
+        <td>{{info.lastName}}</td>
+        <td>{{info.firstName}}</td>
+        <td>{{ info.age}}</td>
+
+    </tr>
+{% endfor %}
+
+{% endblock %}
